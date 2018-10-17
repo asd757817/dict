@@ -68,6 +68,12 @@ int main(int argc, char **argv)
     fclose(fp);
     printf("ternary_tree, loaded %d words in %.6f sec\n", idx, t2 - t1);
 
+    if (argc == 2 && strcmp(argv[1], "--bench") == 0) {
+        int stat = bench_test(root, BENCH_TEST_FILE, LMAX);
+        tst_free(root);
+        return stat;
+    }
+
     for (;;) {
         char *p;
         printf(
@@ -78,7 +84,6 @@ int main(int argc, char **argv)
             " d  delete word from the tree\n"
             " q  quit, freeing all data\n\n"
             "choice: ");
-
         if (argc > 1 && strcmp(argv[1], "--bench") == 0)  // a for auto
             strcpy(word, argv[2]);
         else
