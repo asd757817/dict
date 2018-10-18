@@ -3,8 +3,9 @@
 #include <time.h>
 
 #include "bench.h"
-
-#define DICT_FILE "cities.txt"
+#include "bloom.h"
+//#define DICT_FILE "cities.txt"
+#define DICT_FILE "t.txt"
 #define WORDMAX 256
 
 double tvgetf()
@@ -20,7 +21,80 @@ double tvgetf()
     return sec;
 }
 
+
 int bench_test(const tst_node *root, char *out_file, const int max)
+{
+    char word[WORDMAX] = "";
+    FILE *fp = fopen(out_file, "w");
+    FILE *dict = fopen(DICT_FILE, "r");
+    int idx = 0;
+    double t1, t2;
+
+    if (!fp || !dict) {
+        if (fp) {
+            fprintf(stderr, "error: file open failed in '%s'.\n", DICT_FILE);
+            fclose(fp);
+        }
+        if (dict) {
+            fprintf(stderr, "error: file open failed in '%s'.\n", out_file);
+            fclose(dict);
+        }
+        return 1;
+    }
+
+    while (fscanf(dict, "%s", word) != EOF) {
+        t1 = tvgetf();
+        tst_search(root, word);
+        t2 = tvgetf();
+        fprintf(fp, "%d %f nsec\n", idx, (t2 - t1) * 1000000);
+        idx++;
+    }
+
+    fclose(fp);
+    fclose(dict);
+    return 0;
+}
+
+int bench_test_bloom(const tst_node *root,
+                     char *out_file,
+                     const int max,
+                     bloom_t bloom)
+{
+    char word[WORDMAX] = "";
+    FILE *fp = fopen(out_file, "w");
+    FILE *dict = fopen(DICT_FILE, "r");
+    int idx = 0;
+    double t1, t2;
+
+    if (!fp || !dict) {
+        if (fp) {
+            fprintf(stderr, "error: file open failed in '%s'.\n", DICT_FILE);
+            fclose(fp);
+        }
+        if (dict) {
+            fprintf(stderr, "error: file open failed in '%s'.\n", out_file);
+            fclose(dict);
+        }
+        return 1;
+    }
+
+    while (fscanf(dict, "%s", word) != EOF) {
+        t1 = tvgetf();
+        if (bloom_test(bloom, word) == 1) {
+            tst_search(root, word);
+            t2 = tvgetf();
+        } else
+            t2 = tvgetf();
+        fprintf(fp, "%d %f nsec\n", idx, (t2 - t1) * 1000000);
+        idx++;
+    }
+    fclose(fp);
+    fclose(dict);
+    return 0;
+}
+
+
+int bench_test_prefix(const tst_node *root, char *out_file, const int max)
 {
     char prefix[3] = "";
     char word[WORDMAX] = "";
@@ -50,7 +124,7 @@ int bench_test(const tst_node *root, char *out_file, const int max)
         t1 = tvgetf();
         tst_search_prefix(root, prefix, sgl, &sidx, max);
         t2 = tvgetf();
-        fprintf(fp, "%d %f nsec \n", idx, (t2 - t1) * 1000000);
+        fprintf(fp, "%d %f nsec\n", idx, (t2 - t1) * 1000000);
         idx++;
     }
 

@@ -111,10 +111,18 @@ int main(int argc, char **argv)
             break;
         case 'f':
             printf("find word in tree: ");
+            if (argc > 1 && strcmp(argv[1], "--bench") == 0)
+                strcpy(word, argv[3]);
+            else if (!fgets(word, sizeof word, stdin)) {
+                fprintf(stderr, "error: insufficient input.\n");
+                break;
+            }
+            /*
             if (!fgets(word, sizeof word, stdin)) {
                 fprintf(stderr, "error: insufficient input.\n");
                 break;
             }
+            */
             rmcrlf(word);
             t1 = tvgetf();
             res = tst_search(root, word);
@@ -123,6 +131,9 @@ int main(int argc, char **argv)
                 printf("  found %s in %.6f sec.\n", (char *) res, t2 - t1);
             else
                 printf("  %s not found.\n", word);
+            if (argc > 1 && strcmp(argv[1], "--bench") == 0)  // a for auto
+                goto quit;
+
             break;
         case 's':
             printf("find words matching prefix (at least 1 char): ");

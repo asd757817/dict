@@ -69,7 +69,7 @@ int main(int argc, char **argv)
     printf("ternary_tree, loaded %d words in %.6f sec\n", idx, t2 - t1);
 
     if (argc == 2 && strcmp(argv[1], "--bench") == 0) {
-        int stat = bench_test(root, BENCH_TEST_FILE, LMAX);
+        int stat = bench_test_bloom(root, BENCH_TEST_FILE, LMAX, bloom);
         tst_free(root);
         return stat;
     }
@@ -126,10 +126,18 @@ int main(int argc, char **argv)
             break;
         case 'f':
             printf("find word in tree: ");
+            if (argc > 1 && strcmp(argv[1], "--bench") == 0)
+                strcpy(word, argv[3]);
+            else if (!fgets(word, sizeof word, stdin)) {
+                fprintf(stderr, "error: insufficient input.\n");
+                break;
+            }
+            /*
             if (!fgets(word, sizeof word, stdin)) {
                 fprintf(stderr, "error: insufficient input.\n");
                 break;
             }
+            */
             rmcrlf(word);
             t1 = tvgetf();
 
@@ -151,7 +159,11 @@ int main(int argc, char **argv)
                     printf("  ----------\n  %s not found by tree.\n", word);
             } else
                 printf("  %s not found by bloom filter.\n", word);
+
+            if (argc > 1 && strcmp(argv[1], "--bench") == 0)  // a for auto
+                goto quit;
             break;
+
         case 's':
             printf("find words matching prefix (at least 1 char): ");
 
