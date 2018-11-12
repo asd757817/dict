@@ -54,16 +54,12 @@ bench: $(TESTS)
 	@for test in $(TESTS); do\
 		./$$test --bench $(TEST_DATA); \
 	done
-plot: bench_cpy.txt test_cpy test_ref
+
+plot: $(TESTS) 
 	./test_cpy --bench
 	./test_ref --bench
 	gnuplot scripts/test.gp
 	eog test.png
-plott: bench_cpy.txt test_cpy test_ref
-	./test_cpy --bench
-	./test_ref --bench
-	gnuplot scripts/runtime3.gp
-	eog runtime3.png
 
 clean:
 	$(RM) $(TESTS) $(OBJS)
