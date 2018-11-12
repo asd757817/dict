@@ -64,19 +64,18 @@ plot: $(TESTS)
 perf: $(TESTS)
 	./test_cpy --bench
 	./test_ref --bench
-	perf record -e branch-misses:u,branch-instructions:u ./test_cpy --bench
+	perf record -o cpy_perf.data -e cpu-cycles ./test_cpy --bench	
 	if [ -f cpy_perf.txt  ] ; \
 		then \
 		rm cpy_perf.txt ; \
 	fi;
-	perf report perf.data | sed '/^#/ d' | sed '/^$$/d' >> cpy_perf.txt 
-	perf record -e branch-misses:u,branch-instructions:u ./test_ref --bench
+	perf report -F +period,overhead -i cpy_perf.data | sed '/^#/ d' | sed '/^$$/d' >> cpy_perf.txt 
+	perf record -o ref_perf.data -e cpu-cycles ./test_ref --bench	
 	if [ -f ref_perf.txt  ] ; \
 		then \
 		rm ref_perf.txt ; \
 	fi;
-	perf report perf.data | sed '/^#/ d' | sed '/^$$/d' >> ref_perf.txt 
-
+	perf report -F +period,overhead -i ref_perf.data | sed '/^#/ d' | sed '/^$$/d' >> ref_perf.txt 
 
 clean:
 	$(RM) $(TESTS) $(OBJS)
