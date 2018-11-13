@@ -26,6 +26,7 @@ void *tst_ins_del(tst_node **root,
 /** tst_search(), non-recursive find of a string in ternary tree.
  *  returns pointer to 's' on success, NULL otherwise.
  */
+// tst_node *tst_search(const tst_node *p, const char *s);
 void *tst_search(const tst_node *p, const char *s);
 
 /** tst_search_prefix() fills ptr array 'a' with words prefixed with 's'.

@@ -290,7 +290,9 @@ void *tst_ins_del(tst_node **root, char *const *s, const int del, const int cpy)
 /** tst_search(), non-recursive find of a string internary tree.
  *  returns pointer to 's' on success, NULL otherwise.
  */
+// tst_node *tst_search(const tst_node *p, const char *s)
 void *tst_search(const tst_node *p, const char *s)
+
 {
     const tst_node *curr = p;
 
@@ -298,6 +300,7 @@ void *tst_search(const tst_node *p, const char *s)
         int diff = *s - curr->key; /* calculate the difference */
         if (diff == 0) {           /* handle the equal case */
             if (*s == 0)           /* if *s = curr->key = nul-char, 's' found */
+                                   // return curr->eqkid;
                 return (void *) curr->eqkid; /* return pointer to 's' */
             s++;
             curr = curr->eqkid;
