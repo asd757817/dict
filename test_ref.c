@@ -47,7 +47,7 @@ int main(int argc, char **argv)
     }
     t1 = tvgetf();
 
-    bloom_t bloom = bloom_create(TableSize);
+    bloom_t bloom = bloom_create(TableSize, 2);
 
     /* memory pool */
     char *pool = (char *) malloc(poolsize * sizeof(char));

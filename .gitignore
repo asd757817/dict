@@ -1,4 +1,7 @@
 *.o
+*.png
+*.txt
+*.data*
 *.o.d
 test_cpy
 test_ref
