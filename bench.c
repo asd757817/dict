@@ -64,11 +64,9 @@ int bench_test_bloom(const tst_node *root,
     char buf[WORDMAX];
     FILE *fp = fopen(out_file, "w");
     FILE *dict = fopen(DICT_FILE, "r");
-    /*
-     *     int idx = 0;
-     *     double t1, t2;
-     *
-     */
+    int idx = 0;
+    double t1, t2;
+
     if (!fp || !dict) {
         if (fp) {
             fprintf(stderr, "error: file open failed in '%s'.\n", DICT_FILE);
@@ -80,34 +78,46 @@ int bench_test_bloom(const tst_node *root,
         }
         return 1;
     }
-    /*
-     * while(fgets(buf, WORDMAX, dict)){
-     *     char *token = ",";
-     *     char *c;
-     *     c = strtok(buf, token);
-     * }
-     */
-    while (fscanf(dict, "%s", word) != EOF) {
-        t1 = tvgetf();
-        const tst_node *n = tst_search(root, word);
 
+    while (fgets(buf, WORDMAX, dict)) {
+        char *token = ",";
+        char *c;
+        c = strtok(buf, token);
         int hm;
-        if (bloom_test(bloom, word) == 1) {
-            if (tst_search(root, word)) {
-                hm = 1;
+        t1 = tvgetf();
+
+        if (bloom_test(bloom, c) == 1) {
+            if (tst_search(root, c)) {
                 t2 = tvgetf();
+                hm = 1;  // true positive
             } else {
-                hm = 0;
                 t2 = tvgetf();
+                hm = 0;  // false positive
             }
         } else {
-            hm = 2;
             t2 = tvgetf();
+            hm = 2;  // not in dict
         }
-        fprintf(fp, "%d %f nsec  %s %p %d\n", idx, (t2 - t1) * 1000000, word, n,
-                hm);
+
+        fprintf(fp, "%d %f nsec  %s %d\n", idx, (t2 - t1) * 1000000, c, hm);
         idx++;
     }
+
+    /*
+     * while (fscanf(dict, "%s", word) != EOF) {
+     *     t1 = tvgetf();
+     *     if (bloom_test(bloom, word) == 1) {
+     *         tst_search(root, word);
+     *         t2 = tvgetf();
+     *     }
+     *    	else
+     *         t2 = tvgetf();
+     *
+     *     fprintf(fp, "%d %f nsec  %s %p %d\n", idx, (t2 - t1) * 1000000, word,
+     * n, hm);
+     *     idx++;
+     * }
+     */
     fclose(fp);
     fclose(dict);
     return 0;

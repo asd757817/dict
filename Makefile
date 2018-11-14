@@ -59,6 +59,7 @@ plot: $(TESTS)
 	./test_cpy --bench
 	./test_ref --bench
 	gnuplot scripts/test.gp
+	gnuplot scripts/runtime3.gp
 	eog test.png
 
 perf: $(TESTS)
