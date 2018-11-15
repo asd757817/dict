@@ -8,8 +8,8 @@
 #include "bloom.h"
 #include "tst.h"
 
-#define TableSize 5000000 /* size of bloom filter */
-#define HashNumber 2      /* number of hash functions */
+#define TableSize 1350000 /* size of bloom filter */
+#define HashNumber 10     /* number of hash functions */
 
 /** constants insert, delete, max word(s) & stack nodes */
 enum { INS, DEL, WRDMAX = 256, STKMAX = 512, LMAX = 1024 };
@@ -47,7 +47,7 @@ int main(int argc, char **argv)
     }
     t1 = tvgetf();
 
-    bloom_t bloom = bloom_create(TableSize, 2);
+    bloom_t bloom = bloom_create(TableSize, HashNumber);
 
     /* memory pool */
     char *pool = (char *) malloc(poolsize * sizeof(char));
