@@ -1,5 +1,5 @@
 reset
-set xlabel 'prefix'
+set xlabel 'experiment index'
 set ylabel 'time(sec)'
 set title 'perfomance comparison'
 set term png enhanced font 'Verdana,10'

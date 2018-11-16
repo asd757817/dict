@@ -5,7 +5,9 @@
 #include "bench.h"
 #include "bloom.h"
 //#define DICT_FILE "cities.txt"
-#define DICT_FILE "t.txt"
+//#define DICT_FILE "t.txt"
+#define DICT_FILE "case_1.txt"
+
 #define WORDMAX 256
 #define test_times 100
 
