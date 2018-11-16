@@ -93,7 +93,8 @@ int main(int argc, char **argv)
     printf("ternary_tree, loaded %d words in %.6f sec\n", idx, t2 - t1);
 
     if (argc == 2 && strcmp(argv[1], "--bench") == 0) {
-        int stat = bench_test_bloom(root, BENCH_TEST_FILE, LMAX, bloom);
+        int stat = (bench_test_bloom(root, BENCH_TEST_FILE, LMAX, bloom)) *
+                   (bench_test_bloom_acc(root, BENCH_TEST_FILE, LMAX, bloom));
         tst_free(root);
         return stat;
     }
