@@ -74,7 +74,6 @@ int bench_test_bloom_acc(const tst_node *root,
 
     FILE *dict = fopen(DICT_FILE, "r");
     int idx = 0;
-    double t1, t2;
 
     if (!output_file || !dict) {
         if (output_file) {
@@ -88,15 +87,13 @@ int bench_test_bloom_acc(const tst_node *root,
         return 1;
     }
 
-    double fp = 0;
+    double fp = 0, count = 0;
     while (fgets(buf, WORDMAX, dict)) {
         char *token = ",";
         char *c;
         c = strtok(buf, token);
-        t1 = tvgetf();
         if (bloom_test(bloom, c) == 1) {
             if (!tst_search(root, c)) {
-                t2 = tvgetf();
                 fp += 1;  // false positive
             }
         }

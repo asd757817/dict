@@ -19,4 +19,4 @@ set palette rgbformulae 2, -7, -7
 DEBUG_TERM_HTIC = 119
 DEBUG_TERM_VTIC = 119
 
-plot '../ref_accuracy.txt' using 2:1:3 with image
+plot './ref_accuracy.txt' using 2:1:3 with image
