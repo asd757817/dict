@@ -2,34 +2,6 @@
 #include "stdint.h"
 #include "stdlib.h"
 #include "string.h"
-/*
-unsigned int djb2(const void *_str)
-{
-    const char *str = _str;
-    unsigned int hash = 5381;
-    char c;
-    while ((c = *str++)) {
-        hash = ((hash << 5) + hash) + c;
-    }
-    return hash;
-}
-
-unsigned int jenkins(const void *_str)
-{
-    const char *key = _str;
-    unsigned int hash = 0;
-    while (*key) {
-        hash += *key;
-        hash += (hash << 10);
-        hash ^= (hash >> 6);
-        key++;
-    }
-    hash += (hash << 3);
-    hash ^= (hash >> 11);
-    hash += (hash << 15);
-    return hash;
-}
-*/
 unsigned int murmur3(const void *_str, unsigned int seed)
 {
     size_t len = strlen(_str);
@@ -76,7 +48,7 @@ bloom_t bloom_create(size_t size, unsigned int num_h)
 {
     bloom_t res = calloc(1, sizeof(struct bloom_filter));
     res->size = size;
-    res->bits = malloc(size);
+    res->bits = calloc(size, 1);
 
     for (int i = 0; i < num_h; i++)
         bloom_add_hash(res, i);

@@ -31,6 +31,32 @@ static void rmcrlf(char *s)
 
 #define IN_FILE "cities.txt"
 
+void bloom_dict_insert(bloom_t bloom, tst_node *root)
+{
+    FILE *fp = fopen(IN_FILE, "r");
+    char *pool = (char *) malloc(poolsize * sizeof(char));
+    char *Top = pool;
+    char buf[WORDMAX];
+
+    while (fgets(buf, WORDMAX, fp)) {
+        char *token = ",";
+        strcpy(Top, strtok(buf, token));
+        rmcrlf(Top);
+        char *p = Top;
+        /* insert reference to each string */
+        if (!tst_ins_del(&root, &p, INS, REF)) { /* fail to insert */
+            fprintf(stderr, "error: memory exhausted, tst_insert.\n");
+            fclose(fp);
+            return;
+        } else { /* update bloom filter */
+            bloom_add(bloom, Top);
+        }
+
+        Top += (strlen(Top) + 1);
+    }
+    fclose(fp);
+}
+
 int main(int argc, char **argv)
 {
     char word[WRDMAX] = "";
@@ -72,31 +98,23 @@ int main(int argc, char **argv)
         Top += (strlen(Top) + 1);
     }
 
-    /*
-     * while ((rtn = fscanf(fp, "%s", Top)) != EOF) {
-     *     char *p = Top;
-     *     [> insert reference to each string <]
-     *         if (!tst_ins_del(&root, &p, INS, REF)) { [> fail to insert <]
-     *             fprintf(stderr, "error: memory exhausted, tst_insert.\n");
-     *             fclose(fp);
-     *             return 1;
-     *         } else { [> update bloom filter <]
-     *             bloom_add(bloom, Top);
-     *         }
-     *     idx++;
-     *     Top += (strlen(Top) + 1);
-     * }
-     */
-
     t2 = tvgetf();
     fclose(fp);
     printf("ternary_tree, loaded %d words in %.6f sec\n", idx, t2 - t1);
 
     if (argc == 2 && strcmp(argv[1], "--bench") == 0) {
-        int stat = (bench_test_bloom(root, BENCH_TEST_FILE, LMAX, bloom)) *
-                   (bench_test_bloom_acc(root, BENCH_TEST_FILE, LMAX, bloom));
+        for (int table_size = 1; table_size < 41; table_size++) {
+            for (int hash_num = 1; hash_num < 16; hash_num++) {
+                bloom_t bloom_err_test =
+                    bloom_create(table_size * 50000, hash_num);
+                bloom_dict_insert(bloom_err_test, root);
+                bench_test_bloom_acc(root, BENCH_TEST_FILE, LMAX,
+                                     bloom_err_test, hash_num);
+                bloom_free(bloom_err_test);
+            }
+        }
         tst_free(root);
-        return stat;
+        return 1;
     }
 
     for (;;) {
@@ -157,12 +175,7 @@ int main(int argc, char **argv)
                 fprintf(stderr, "error: insufficient input.\n");
                 break;
             }
-            /*
-               if (!fgets(word, sizeof word, stdin)) {
-               fprintf(stderr, "error: insufficient input.\n");
-               break;
-               }
-               */
+
             rmcrlf(word);
             t1 = tvgetf();
 

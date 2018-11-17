@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <math.h>
 #include <stdlib.h>
 #include <time.h>
 
@@ -65,11 +66,11 @@ int bench_test(const tst_node *root, char *out_file, const int max)
 int bench_test_bloom_acc(const tst_node *root,
                          char *out_file,
                          const int max,
-                         bloom_t bloom)
+                         bloom_t bloom,
+                         int hash_num)
 {
-    // char word[WORDMAX] = "";
     char buf[WORDMAX];
-    FILE *output_file = fopen("ref_accuracy.txt", "w");
+    FILE *output_file = fopen("ref_accuracy.txt", "a");
 
     FILE *dict = fopen(DICT_FILE, "r");
     int idx = 0;
@@ -87,37 +88,24 @@ int bench_test_bloom_acc(const tst_node *root,
         return 1;
     }
 
-    double tp = 0, fp = 0, tn = 0, fn = 0, count = 0;
-    double total_time = 0;
+    double fp = 0;
     while (fgets(buf, WORDMAX, dict)) {
         char *token = ",";
         char *c;
         c = strtok(buf, token);
         t1 = tvgetf();
         if (bloom_test(bloom, c) == 1) {
-            if (tst_search(root, c)) {
-                t2 = tvgetf();
-                tp += 1;  // true positive
-            } else {
+            if (!tst_search(root, c)) {
                 t2 = tvgetf();
                 fp += 1;  // false positive
             }
-        } else {
-            t2 = tvgetf();
-            if (tst_search(root, c))
-                fn += 1;  // false negative
-            else
-                tn += 1;  // true negative
         }
-        // fprintf(fp, "%d %f nsec  %s\n", idx, (t2 - t1) * 1000000, c);
-        total_time += (t2 - t1);
         idx++;
         count++;
     }
-    double acc = (tp + tn) / count;
-    // total_time, tp, fp, fn, tn, accuracy
-    fprintf(output_file, "%f %f %f %f %f %f\n", total_time, tp, fp, fn, tn,
-            acc);
+    double err = fp / count;
+    fprintf(output_file, "%lu %d %f\n", bloom->size / 50000, hash_num,
+            sqrt(sqrt(err)));
     fclose(dict);
     fclose(output_file);
 
@@ -159,7 +147,6 @@ int bench_test_prefix(const tst_node *root, char *out_file, const int max)
             t1 = tvgetf();
             tst_search_prefix(root, prefix, sgl, &sidx, max);
             t2 = tvgetf();
-            // fprintf(fp, "%d %f nsec\n", idx, (t2 - t1) * 1000000);
             total_time += (t2 - t1);
             idx++;
         }
@@ -176,7 +163,6 @@ int bench_test_bloom(const tst_node *root,
                      const int max,
                      bloom_t bloom)
 {
-    // char word[WORDMAX] = "";
     char buf[WORDMAX];
     FILE *output_file = fopen(out_file, "w");
 
@@ -213,7 +199,6 @@ int bench_test_bloom(const tst_node *root,
             } else {
                 t2 = tvgetf();
             }
-            // fprintf(fp, "%d %f nsec  %s\n", idx, (t2 - t1) * 1000000, c);
             total_time += (t2 - t1);
             idx++;
         }
