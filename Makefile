@@ -24,7 +24,7 @@ $(GIT_HOOKS):
 	@echo
 
 OBJS_LIB = \
-    tst.o bloom.o
+    tst.o bloom.o 
 
 OBJS := \
     $(OBJS_LIB) \
@@ -55,10 +55,15 @@ bench: $(TESTS)
 		./$$test --bench $(TEST_DATA); \
 	done
 
-plot: $(TESTS) 
+plot: $(TESTS)
+	if [ -f ref_accuracy.txt  ] ; \
+		then \
+		rm ref_accuracy.txt ; \
+	fi;
 	./test_cpy --bench
-	./test_ref --bench
+	- ./test_ref --bench
 	gnuplot scripts/test.gp
+	gnuplot scripts/bloom_err_rate.gp
 	gnuplot scripts/runtime3.gp
 	eog runtime3.png
 
@@ -81,6 +86,6 @@ perf: $(TESTS)
 clean:
 	$(RM) $(TESTS) $(OBJS)
 	$(RM) $(deps)
-	rm -f  bench_cpy.txt bench_ref.txt ref.txt cpy.txt caculate
+	rm -f  bench_cpy.txt bench_ref.txt ref.txt cpy.txt caculate ref_accuracy.txt
 
 -include $(deps)
