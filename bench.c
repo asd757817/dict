@@ -64,13 +64,13 @@ int bench_test(const tst_node *root, char *out_file, const int max)
 }
 
 int bench_test_bloom_acc(const tst_node *root,
+                         FILE *output_file,
                          char *out_file,
                          const int max,
                          bloom_t bloom,
                          int hash_num)
 {
     char buf[WORDMAX];
-    FILE *output_file = fopen("ref_accuracy.txt", "a");
 
     FILE *dict = fopen(DICT_FILE, "r");
     int idx = 0;
@@ -104,7 +104,6 @@ int bench_test_bloom_acc(const tst_node *root,
     fprintf(output_file, "%lu %d %f\n", bloom->size / 50000, hash_num,
             sqrt(sqrt(err)));
     fclose(dict);
-    fclose(output_file);
 
     return 0;
 }
