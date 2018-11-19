@@ -65,7 +65,7 @@ int bench_test(const tst_node *root, char *out_file, const int max)
 
 int bench_test_bloom_acc(const tst_node *root,
                          FILE *output_file,
-                         char *out_file,
+                         FILE *bench_ref,
                          const int max,
                          bloom_t bloom,
                          int hash_num)
@@ -74,6 +74,7 @@ int bench_test_bloom_acc(const tst_node *root,
 
     FILE *dict = fopen(DICT_FILE, "r");
     int idx = 0;
+    double t1 = 0, t2 = 0;
 
     if (!output_file || !dict) {
         if (output_file) {
@@ -81,13 +82,15 @@ int bench_test_bloom_acc(const tst_node *root,
             fclose(output_file);
         }
         if (dict) {
-            fprintf(stderr, "error: file open failed in '%s'.\n", out_file);
+            fprintf(stderr, "error: file open failed in '%s'.\n",
+                    "ref_accuraacy.txt");
             fclose(dict);
         }
         return 1;
     }
 
     double fp = 0, count = 0;
+    t1 = tvgetf();
     while (fgets(buf, WORDMAX, dict)) {
         char *token = ",";
         char *c;
@@ -100,9 +103,13 @@ int bench_test_bloom_acc(const tst_node *root,
         idx++;
         count++;
     }
+    t2 = tvgetf();
     double err = fp / count;
-    fprintf(output_file, "%lu %d %f\n", bloom->size / 50000, hash_num,
+    double total_time = (t2 - t1);
+    fprintf(output_file, "%d %d %f\n", (int) bloom->size / 50000, hash_num,
             sqrt(sqrt(err)));
+    fprintf(bench_ref, "%d %d %f\n", (int) bloom->size / 50000, hash_num,
+            total_time);
     fclose(dict);
 
     return 0;
