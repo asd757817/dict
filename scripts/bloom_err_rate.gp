@@ -10,14 +10,15 @@ set ztics border in scale 0,0 nomirror norotate  autojustify
 unset cbtics
 set rtics axis in scale 0,0 nomirror norotate  autojustify
 set title "Error Rate of bloom filter" 
-set ylabel 'size of bloom filter(x50kbits)'
-set xlabel 'number of hash funciton'
-set xrange [ 0.500000 : 15.50000 ] noreverse nowriteback
-set yrange [ 0.500000 : 40.50000 ] noreverse nowriteback
-set cblabel "Error rate(The forth root))" 
+set xlabel 'size of bloom filter(x50kbits)'
+set ylabel 'number of hash funciton'
+set yrange [ 0.500000 : 15.50000 ] noreverse nowriteback
+set xrange [ 0.500000 : 40.50000 ] noreverse nowriteback
+set cblabel "Error rate(The forth root)" 
 set cbrange [ 0.00000 : 0.60000 ] noreverse nowriteback
 set palette rgbformulae 2, -7, -7
 DEBUG_TERM_HTIC = 119
 DEBUG_TERM_VTIC = 119
 
-plot 'ref_accuracy.txt' using 2:1:3 with image
+plot 'ref_accuracy.txt' using 1:2:3 with image ,\
+log(2)*50000/93827*x
