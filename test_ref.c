@@ -105,8 +105,8 @@ int main(int argc, char **argv)
     if (argc == 2 && strcmp(argv[1], "--bench") == 0) {
         FILE *output_file = fopen("ref_accuracy.txt", "w");
         FILE *bench_ref = fopen(BENCH_TEST_FILE, "w");
-        for (int table_size = 1; table_size < 41; table_size++) {
-            for (int hash_num = 1; hash_num < 16; hash_num++) {
+        for (int hash_num = 1; hash_num < 16; hash_num++) {
+            for (int table_size = 1; table_size < 41; table_size++) {
                 bloom_t bloom_err_test =
                     bloom_create(table_size * 50000, hash_num);
                 bloom_dict_insert(bloom_err_test, root);
