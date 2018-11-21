@@ -2,6 +2,7 @@ clear
 reset
 set xlabel 'search time(nsec)'
 set ylabel 'count'
+set auto x
 set title 'perfomance comparison'
 set term png enhanced font 'Verdana,10'
 set output 'test.png'
@@ -18,6 +19,7 @@ set boxwidth 0.1 absolute
 #set style fill solid 1.0 noborder
 bin_width = 0.1;
 bin_number(x) = floor(x/bin_width)
-rounded(x) = bin_width * ( bin_number(x) + 0.5  )
-plot [0:3][0:]'bench_cpy.txt' using (rounded($2)):(1) smooth freq with boxes title 'cpy',\
+rounded(x) = bin_width * ( bin_number(x) + 0 )
+
+plot [0:2][0:]'bench_cpy.txt' using (rounded($2)):(1) smooth freq with boxes title 'cpy',\
 'bench_ref.txt' using (rounded($2)):(1) smooth freq with boxes title 'ref',\

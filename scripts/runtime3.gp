@@ -8,7 +8,7 @@ set format x "%10.0f"
 set xtics rotate by 45 right
 
 plot [:][:] 'bench_cpy.txt' using 1:2 with points title 'cpy',\
-				 'bench_ref.txt' using 1:2 with points title 'ref',\
+				 'bench_ref.txt' using 1 with points title 'ref',\
 
 
 

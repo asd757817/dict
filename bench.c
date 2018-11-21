@@ -89,7 +89,7 @@ int bench_test_bloom_acc(const tst_node *root,
         return 1;
     }
 
-    double fp = 0, count = 0;
+    double fp = 0, count = 0, total_time = 0;
     t1 = tvgetf();
     while (fgets(buf, WORDMAX, dict)) {
         char *token = ",";
@@ -100,16 +100,15 @@ int bench_test_bloom_acc(const tst_node *root,
                 fp += 1;  // false positive
             }
         }
-        idx++;
         count++;
     }
+    idx++;
     t2 = tvgetf();
     double err = fp / count;
-    double total_time = (t2 - t1);
+    total_time += (t2 - t1);
     fprintf(output_file, "%d %d %f\n", (int) bloom->size / 50000, hash_num,
             sqrt(sqrt(err)));
-    fprintf(bench_ref, "%d %d %f\n", (int) bloom->size / 50000, hash_num,
-            total_time);
+    fprintf(bench_ref, "%f\n", total_time);
     fclose(dict);
 
     return 0;
