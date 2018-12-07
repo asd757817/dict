@@ -10,7 +10,7 @@
 #define DICT_FILE "case_1.txt"
 
 #define WORDMAX 256
-#define test_times 100
+#define test_times 600
 
 double tvgetf()
 {
@@ -106,8 +106,8 @@ int bench_test_bloom_acc(const tst_node *root,
     t2 = tvgetf();
     double err = fp / count;
     total_time += (t2 - t1);
-    fprintf(output_file, "%d %d %f\n", (int) bloom->size / 50000, hash_num,
-            sqrt(sqrt(err)));
+    fprintf(output_file, "%d %d %.10lf\n", (int) bloom->size / 50000, hash_num,
+            err);
     fprintf(bench_ref, "%f\n", total_time);
     fclose(dict);
 

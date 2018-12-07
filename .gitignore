@@ -3,5 +3,6 @@
 *.txt
 *.data*
 *.o.d
+*.swp
 test_cpy
 test_ref
