@@ -5,10 +5,10 @@ set ylabel 'count'
 set auto x
 set title 'perfomance comparison'
 set term png enhanced font 'Verdana,10'
-set output 'total_search_time.png'
+set output 'plot/total_search_time.png'
 
-stats 'bench_cpy.txt' using 2 name 'cpy'
-stats 'bench_ref.txt' using 1 name 'ref'
+stats 'rse/bench_cpy.txt' using 2 name 'cpy'
+stats 'rse/bench_ref.txt' using 1 name 'ref'
 
 set arrow 1 from cpy_mean,graph -0.1 to cpy_mean,graph 0 filled back lw 3 lc rgb "blue"
 set label "mean cpy" at 0,graph -0.10 center offset -1,0 textcolor "blue" 
@@ -21,6 +21,6 @@ bin_width = 0.01;
 bin_number(x) = floor(x/bin_width)
 rounded(x) = bin_width * ( bin_number(x) + 0 )
 
-plot [0:][0:]'bench_cpy.txt' using (rounded($2)):(1) smooth freq with boxes title 'cpy',\
-'bench_ref.txt' using (rounded($3)):(1) smooth freq with boxes title 'ref',\
+plot [0:][0:]'rse/bench_cpy.txt' using (rounded($2)):(1) smooth freq with boxes title 'cpy',\
+'rse/bench_ref.txt' using (rounded($3)):(1) smooth freq with boxes title 'ref',\
 

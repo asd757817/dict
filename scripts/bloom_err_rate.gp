@@ -1,6 +1,6 @@
 reset
 set terminal png enhanced font "arial,10" fontscale 1.0 size 600, 400 
-set output 'bloom_err_rate.png'
+set output 'plot/bloom_err_rate.png'
 unset key
 set view map scale 1
 set style data lines
@@ -20,5 +20,5 @@ set palette rgbformulae 2, -7, -7
 DEBUG_TERM_HTIC = 119
 DEBUG_TERM_VTIC = 119
 
-plot 'ref_accuracy.txt' using 1:2:3 with image ,\
+plot 'res/ref_accuracy.txt' using 1:2:3 with image ,\
 log(2)*50000/93827*x
