@@ -59,12 +59,10 @@ plot: $(TESTS)
 	python gen_test.py
 	./test_cpy --bench
 	./test_ref --bench
-	#gnuplot scripts/test.gp
 	gnuplot scripts/bloom_err_rate.gp
 	gnuplot scripts/runtime3.gp
 	eog runtime3.png
 	eog bloom_err_rate.png
-	#eog test.png
 
 perf: $(TESTS)
 	./test_cpy --bench
