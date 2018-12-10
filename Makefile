@@ -55,14 +55,14 @@ bench: $(TESTS)
 		./$$test --bench $(TEST_DATA); \
 	done
 
-plot: $(TESTS)
+plot: $(TESTS) res/case_*.txt
 	python gen_test.py
 	./test_cpy --bench
 	./test_ref --bench
 	gnuplot scripts/bloom_err_rate.gp
 	gnuplot scripts/runtime3.gp
-	eog runtime3.png
-	eog bloom_err_rate.png
+	eog plot/runtime3.png
+	eog plot/bloom_err_rate.png
 
 perf: $(TESTS)
 	./test_cpy --bench

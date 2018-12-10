@@ -56,6 +56,7 @@ void bloom_dict_insert(bloom_t bloom, tst_node *root)
         Top += (strlen(Top) + 1);
     }
     fclose(fp);
+    free(pool);
 }
 
 int main(int argc, char **argv)
