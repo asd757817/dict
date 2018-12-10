@@ -25,7 +25,7 @@ set ylabel 'time(sec)'
 set title 'comparison'
 set format x "%5.0f"
 set xtics rotate by 45 right
-stats 'bench_cpy.txt' using 2 name 'cpy'
+stats 'res/bench_cpy.txt' using 2 name 'cpy'
 
 plot [:][:] 'res/bench_cpy.txt' using 1:2 with points lc rgb "blue" title 'cpy',\
 				 'res/bench_ref.txt' using 1 with points lc rgb "red" title 'ref',\
