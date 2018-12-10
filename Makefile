@@ -56,6 +56,12 @@ bench: $(TESTS)
 	done
 
 plot: $(TESTS)
+	if [i! -d "./plot/" ]; then/
+	  mkdir ./plot/;
+	fi
+	if [i! -d "./res/" ]; then/
+	  mkdir ./res/;
+	fi
 	python gen_test.py
 	./test_cpy --bench
 	./test_ref --bench
