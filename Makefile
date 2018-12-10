@@ -18,12 +18,6 @@ GIT_HOOKS := .git/hooks/applied
 .PHONY: all clean
 
 all: $(GIT_HOOKS) $(TESTS)
-	if [ ! -d "./plot/" ]; then\
-	  mkdir ./plot/;\
-	fi;
-	if [ ! -d "./res/" ]; then\
-	  mkdir ./res/;\
-	fi;
 
 $(GIT_HOOKS):
 	@scripts/install-git-hooks

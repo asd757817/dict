@@ -5,7 +5,7 @@ rot13 = string.maketrans(
                 "NOPQRSTUVWXYZnopqrstuvwxyzABCDEFGHIJKLMabcdefghijklm")
 
 for i in range(10):
-    fi = open("res/cities.txt",'r')
+    fi = open("cities.txt",'r')
     file_name = "res/case_"+str(i+1)+".txt"
     fo = open(file_name,'w')
     for l in fi.readlines():

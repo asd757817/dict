@@ -5,7 +5,7 @@
 
 #include "bench.h"
 #include "bloom.h"
-//#define DICT_FILE "res/cities.txt"
+//#define DICT_FILE "cities.txt"
 //#define DICT_FILE "rest.txt"
 #define DICT_FILE "res/case_2.txt"
 

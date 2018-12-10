@@ -20,7 +20,7 @@ static void rmcrlf(char *s)
         s[--len] = 0;
 }
 
-#define IN_FILE "res/cities.txt"
+#define IN_FILE "cities.txt"
 
 int main(int argc, char **argv)
 {

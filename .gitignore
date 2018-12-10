@@ -1,6 +1,6 @@
 *.o
 *.png
-*.txt
+res/*.txt
 *.data*
 *.o.d
 *.swp
