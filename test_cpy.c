@@ -10,7 +10,7 @@ enum { INS, DEL, WRDMAX = 256, STKMAX = 512, LMAX = 1024 };
 #define REF INS
 #define CPY DEL
 
-#define BENCH_TEST_FILE "bench_cpy.txt"
+#define BENCH_TEST_FILE "res/bench_cpy.txt"
 
 /* simple trim '\n' from end of buffer filled by fgets */
 static void rmcrlf(char *s)
@@ -20,7 +20,7 @@ static void rmcrlf(char *s)
         s[--len] = 0;
 }
 
-#define IN_FILE "cities.txt"
+#define IN_FILE "res/cities.txt"
 
 int main(int argc, char **argv)
 {
@@ -78,7 +78,7 @@ int main(int argc, char **argv)
     }
 
     FILE *output;
-    output = fopen("cpy.txt", "a");
+    output = fopen("res/cpy.txt", "a");
     if (output != NULL) {
         fprintf(output, "%.6f\n", t2 - t1);
         fclose(output);

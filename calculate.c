@@ -3,8 +3,8 @@
 
 int main(void)
 {
-    FILE *fp = fopen("cpy.txt", "r");
-    FILE *output = fopen("output.txt", "w");
+    FILE *fp = fopen("res/cpy.txt", "r");
+    FILE *output = fopen("res/output.txt", "w");
 
     if (!fp || !output) {
         printf("ERROR opening input file orig.txt\n");
@@ -16,7 +16,7 @@ int main(void)
     while (fscanf(fp, "%lf\n", &temp) != EOF)
         sum += temp;
 
-    FILE *fp2 = fopen("ref.txt", "r");
+    FILE *fp2 = fopen("res/ref.txt", "r");
     if (!fp2 || !output) {
         printf("ERROR opening input file orig.txt\n");
         exit(0);

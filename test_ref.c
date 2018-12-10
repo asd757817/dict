@@ -17,7 +17,8 @@ enum { INS, DEL, WRDMAX = 256, STKMAX = 512, LMAX = 1024 };
 #define REF INS
 #define CPY DEL
 
-#define BENCH_TEST_FILE "bench_ref.txt"
+#define BENCH_TEST_FILE "res/bench_ref.txt"
+
 
 long poolsize = 2000000 * WRDMAX;
 
@@ -29,7 +30,7 @@ static void rmcrlf(char *s)
         s[--len] = 0;
 }
 
-#define IN_FILE "cities.txt"
+#define IN_FILE "res/cities.txt"
 
 void bloom_dict_insert(bloom_t bloom, tst_node *root)
 {
@@ -103,7 +104,7 @@ int main(int argc, char **argv)
     printf("ternary_tree, loaded %d words in %.6f sec\n", idx, t2 - t1);
 
     if (argc == 2 && strcmp(argv[1], "--bench") == 0) {
-        FILE *output_file = fopen("ref_accuracy.txt", "w");
+        FILE *output_file = fopen("res/ref_accuracy.txt", "w");
         FILE *bench_ref = fopen(BENCH_TEST_FILE, "w");
         for (int hash_num = 1; hash_num < 16; hash_num++) {
             for (int table_size = 1; table_size < 41; table_size++) {

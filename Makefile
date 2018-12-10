@@ -68,21 +68,21 @@ perf: $(TESTS)
 	./test_cpy --bench
 	./test_ref --bench
 	perf record -o cpy_perf.data -e cpu-cycles ./test_cpy --bench	
-	if [ -f cpy_perf.txt  ] ; \
+	if [ -f res/cpy_perf.txt  ] ; \
 		then \
-		rm cpy_perf.txt ; \
+		rm res/cpy_perf.txt ; \
 	fi;
-	perf report -F +period,overhead -i cpy_perf.data | sed '/^#/ d' | sed '/^$$/d' >> cpy_perf.txt 
+	perf report -F +period,overhead -i cpy_perf.data | sed '/^#/ d' | sed '/^$$/d' >> res/cpy_perf.txt 
 	perf record -o ref_perf.data -e cpu-cycles ./test_ref --bench	
-	if [ -f ref_perf.txt  ] ; \
+	if [ -f ref_res/perf.txt  ] ; \
 		then \
-		rm ref_perf.txt ; \
+		rm ref_res/perf.txt ; \
 	fi;
-	perf report -F +period,overhead -i ref_perf.data | sed '/^#/ d' | sed '/^$$/d' >> ref_perf.txt 
+	perf report -F +period,overhead -i ref_perf.data | sed '/^#/ d' | sed '/^$$/d' >> res/ref_perf.txt 
 
 clean:
 	$(RM) $(TESTS) $(OBJS)
 	$(RM) $(deps)
-	rm -f  bench_cpy.txt bench_ref.txt ref.txt cpy.txt caculate ref_accuracy.txt
+	rm -f  res/*
 
 -include $(deps)

@@ -5,9 +5,9 @@
 
 #include "bench.h"
 #include "bloom.h"
-//#define DICT_FILE "cities.txt"
-//#define DICT_FILE "t.txt"
-#define DICT_FILE "case_2.txt"
+//#define DICT_FILE "res/cities.txt"
+//#define DICT_FILE "rest.txt"
+#define DICT_FILE "res/case_2.txt"
 
 #define WORDMAX 256
 #define test_times 600
@@ -83,7 +83,7 @@ int bench_test_bloom_acc(const tst_node *root,
         }
         if (dict) {
             fprintf(stderr, "error: file open failed in '%s'.\n",
-                    "ref_accuraacy.txt");
+                    "resref_accuraacy.txt");
             fclose(dict);
         }
         return 1;
