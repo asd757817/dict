@@ -71,9 +71,11 @@ int bench_test_bloom_acc(const tst_node *root,
                          int hash_num)
 {
     char buf[WORDMAX];
+    char prefix[3] = "";
+    char **sgl;
 
     FILE *dict = fopen(DICT_FILE, "r");
-    int idx = 0;
+    int idx = 0, sidx = 0;
     double t1 = 0, t2 = 0;
 
     if (!output_file || !dict) {
@@ -90,13 +92,19 @@ int bench_test_bloom_acc(const tst_node *root,
     }
 
     double fp = 0, count = 0, total_time = 0;
+    sgl = (char **) malloc(sizeof(char *) * max);
     t1 = tvgetf();
     while (fgets(buf, WORDMAX, dict)) {
         char *token = ",";
         char *c;
         c = strtok(buf, token);
+        if (strlen(c) < 4)
+            continue;
+        strncpy(prefix, c, 3);
+        // t1 = tvgetf();
         if (bloom_test(bloom, c) == 1) {
-            if (!tst_search(root, c)) {
+            if (!tst_search_prefix(root, prefix, sgl, &sidx, 1024)) {
+                // if (!tst_search(root, c)) {
                 fp += 1;  // false positive
             }
         }
@@ -165,12 +173,15 @@ int bench_test_bloom(const tst_node *root,
                      const int max,
                      bloom_t bloom)
 {
+    char prefix[3] = "";
     char buf[WORDMAX];
+
+    char **sgl;
     FILE *output_file = fopen(out_file, "w");
 
     for (int i = 0; i < test_times; i++) {
         FILE *dict = fopen(DICT_FILE, "r");
-        int idx = 0;
+        int idx = 0, sidx = 0;
         double t1, t2;
 
         if (!output_file || !dict) {
@@ -186,14 +197,19 @@ int bench_test_bloom(const tst_node *root,
             return 1;
         }
 
+        sgl = (char **) malloc(sizeof(char *) * max);
         double total_time = 0;
         while (fgets(buf, WORDMAX, dict)) {
             char *token = ",";
             char *c;
             c = strtok(buf, token);
+            if (strlen(c) < 4)
+                continue;
+            strncpy(prefix, c, 3);
             t1 = tvgetf();
             if (bloom_test(bloom, c) == 1) {
-                if (tst_search(root, c)) {
+                // if (tst_search(root, c)) {
+                if (tst_search_prefix(root, prefix, sgl, &sidx, 1024)) {
                     t2 = tvgetf();
                 } else {
                     t2 = tvgetf();

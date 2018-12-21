@@ -29,7 +29,7 @@ OBJS_LIB = \
 OBJS := \
     $(OBJS_LIB) \
     test_cpy.o \
-    test_ref.o
+    test_ref.o \
 
 deps := $(OBJS:%.o=.%.o.d)
 
