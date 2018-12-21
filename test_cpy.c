@@ -70,8 +70,8 @@ int main(int argc, char **argv)
     printf("ternary_tree, loaded %d words in %.6f sec\n", idx, t2 - t1);
 
     if (argc == 2 && strcmp(argv[1], "--bench") == 0) {
-        int stat = bench_test_prefix(root, BENCH_TEST_FILE, LMAX);
-        // int stat = bench_test(root, BENCH_TEST_FILE, LMAX);
+        // int stat = bench_test_prefix(root, BENCH_TEST_FILE, LMAX);
+        int stat = bench_test(root, BENCH_TEST_FILE, LMAX);
 
         tst_free_all(root);
         return stat;
