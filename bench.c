@@ -6,11 +6,12 @@
 #include "bench.h"
 #include "bloom.h"
 //#define DICT_FILE "cities.txt"
-//#define DICT_FILE "rest.txt"
-#define DICT_FILE "res/case_5.txt"
+//#define DICT_FILE "res/case_1.txt"
+#define DICT_FILE "res/case_final.txt"
+
 
 #define WORDMAX 256
-#define test_times 600
+#define test_times 1
 
 double tvgetf()
 {
@@ -28,7 +29,7 @@ double tvgetf()
 
 int bench_test(const tst_node *root, char *out_file, const int max)
 {
-    char word[WORDMAX] = "";
+    char buf[WORDMAX];
     FILE *output_file = fopen(out_file, "w");
     for (int i = 0; i < test_times; i++) {
         FILE *dict = fopen(DICT_FILE, "r");
@@ -48,11 +49,13 @@ int bench_test(const tst_node *root, char *out_file, const int max)
             return 1;
         }
 
-        while (fscanf(dict, "%s", word) != EOF) {
+        while (fgets(buf, WORDMAX, dict)) {
+            char *token = ",";
+            char *c;
+            c = strtok(buf, token);
             t1 = tvgetf();
-            tst_search(root, word);
+            tst_search(root, c);
             t2 = tvgetf();
-            // fprintf(fp, "%d %f nsec\n", idx, (t2 - t1) * 1000000);
             total_time += (t2 - t1);
             idx++;
         }
@@ -89,22 +92,25 @@ int bench_test_bloom_acc(const tst_node *root,
     }
 
     double fp = 0, count = 0, total_time = 0;
+
     t1 = tvgetf();
     while (fgets(buf, WORDMAX, dict)) {
         char *token = ",";
         char *c;
         c = strtok(buf, token);
+
+        t1 = tvgetf();
         if (bloom_test(bloom, c) == 1) {
             if (!tst_search(root, c)) {
                 fp += 1;  // false positive
             }
         }
+        t2 = tvgetf();
+        total_time += (t2 - t1);
         count++;
     }
     idx++;
-    t2 = tvgetf();
     double err = fp / count;
-    total_time += (t2 - t1);
     fprintf(output_file, "%d %d %.10lf\n", (int) bloom->size / 50000, hash_num,
             err);
     fprintf(bench_ref, "%f\n", total_time);
